@@ -1,0 +1,73 @@
+-I downloaded mongodb and mongodb shell, i put the environment variable of mongos shell, and established connection on mongodb atlas
+-After installing extension of mongodb, we can connect and after connecting, we can right click on the connection and select launch mongodb shell
+-in the shell we can type "mongosh" to open mongo shell
+-when we type "show dbs" it will show all databases
+-to select a database we type "use *database* "
+-and to make a database we type "use *database*"
+-to make the newly made database visible on typing show dbs, we need to put something in that database
+-we type db.createCollection("*name of the file*")
+-to delete/drop a database we can do it from 1. going to the leaf icon of mongodb -> right click -> drop database
+  2. or we can also type "db.dropDatabase()" ONLY after we have the database selected
+-to insert a document inside the database use "db.*database*.insertOne({*details like name:"Jaspreet", age:19,...*})"
+*NOTE- when you mention the database, it is not necessary that you have made it, it will automatically be made
+-to view inside the document we made we type "db.*database*.find()"
+-we can also make many documents at once by "db.*database*.insertMany([{*details*}, {*details 2*}...])"
+-we can also add date in the values by typing "new Date()", we can also set a field to "null"
+-we can also set multiple things inside a particular thing like in the field courses, courses: ["bio, "chem"]
+we can also do [{*details*}, {*details 2*}...] inside the document 
+-now we see sorting methods, we type the following
+      db.*database*.find().sort({*field*: 1}) 
+  1 means alphabetical order/ascending order and -1 means reverse-alphabetical order/descending order
+- "db.*database*.find().limit(1)" 
+    it will limit the response to 1 i.e. what you wished for, the data we  inserted in the start is numbered first and so on...
+- for example, we can also sort student with the highest gpa in some database named students by typing 
+  db.students.find().sort({gpa:-1}).limit(1)
+-if we want more than 1 specific info of people we type the following
+      db.*database*.find({}, {_id:false, name:true}) 
+  here _id means object id and if set to false it wont be displayed, name:true means name will be displayed
+-to update the data of something we do the below code
+      db.*database*.updateOne({_id:...}, {$set:{name:"billu"}})
+  _id is unique so we selected it else we can also select name or any field, $set is the new value to set
+-if we want to unset or remove  some data from a field we do
+        db.*database*.updateOne({_id:...}, {$unset:{name:""}})
+-to change many fields we do the following
+        db.*database*.updateMany({full:{$exists:false}}, {$set:{full:true}}) 
+it will change all values set to false to true
+-to delete a data we do the following
+      db.*database*.deleteOne({name:"christian"})
+-to delete many fields
+      db.*database*.deleteMany({fullTime: false})
+    it will delete all false
+- if a particular field is missing from people's data, delete those people
+      db.*database*.deleteMany({registerDate:{$exists:false}})
+  it will delete all people whose registration date is not present
+-if we want all data except a particular one then
+    db.*database*.find({name:{$ne:"billu"}})
+  $ne means not equals
+  similarly, lt= less than and lte=less than equals to, gt= greater than, gte=greater than equals
+-to use & operator here we do the following(only for numbers)
+    db.*database*.find({gps:{$gte:3, $lte:4}})
+- to get specific values we can use 
+    db.*database*.find({name:{$in:["billu", "boy", "girl"]}})
+  $in will give only those fields having name as the 3
+  similarly we can use $nin for everything except these
+-we now see & operator
+      db.*database*.find({$and: [{fullTime:true}, {age:{$lte:22}}]})
+    it will find all people with fullTime and age less than equal 22
+    similarly, we can use $or and $nor for the things where the given conditions are FALSE!
+-we can also use not operator
+      db.*database*.find({age:{$not:{$gte:30}}})
+  it will select all people whose age is not greater than or equal to 30
+-we can create an index by
+    db.*database*.createIndex({name:1})
+  we get index called name_1 from it
+  then we can store some data inside this thing
+  db.*database*.find({name::"Larry"}).explain("executionStats")
+-we can also get all indexes made by
+      db.*database*.getIndexes()
+-we can drop index by 
+    db.*database*.dropIndex("*index name*)
+-a database is a group of collections and collection is group of documents
+-to make a collection
+    db.createCollection("*name*", {capped:true, size: 100000000, max:100}, {autoIndexId:false})
+    capped means put limit? yes, what should be the size of the whole limit thing(in bytes) 10000000, how many max entries? 100 and autofill=false
